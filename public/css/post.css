@@ -1,0 +1,21 @@
+body {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #008080;
+    color: #000;
+}
+
+.navbar-laravel {
+    background-color: #008080;
+}
+
+.navbar-brand {
+    color: #000 !important;
+}
+
+.nav-link {
+    color: #000 !important;
+}
+
+
+
