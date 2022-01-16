@@ -41,27 +41,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($post as $posts)
+                            @foreach($posts as $post)
                                 <tr>
                                     <th>{{ $post->id }}</th>
                                     <td>{{ \Str::limit($post->title, 100) }}</td>
-                                    <td>{{ \Str::limit($post->author, 20 }}</td>
-                                    <td>{{ \Str::limit($post->publisher, 20 }}</td>
-                                    <td>{{ \Str::limit($post->publication_date, 20 }}</td>
-                                    <td>{{ \Str::limit($post->word, 100 }}</td>
-                                    <td>{{ \Str::limit($post->feelings, 100 }}</td>
+                                    <td>{{ \Str::limit($post->author, 20) }}</td>
+                                    <td>{{ \Str::limit($post->publisher, 20) }}</td>
+                                    <td>{{ \Str::limit($post->publication_date, 20) }}</td>
+                                    <td>{{ \Str::limit($post->word, 100) }}</td>
+                                    <td>{{ \Str::limit($post->feelings, 100) }}</td>
                                     <td>
                                         <div>
-                                            <a href="{{ action('PostsController@edit', ['id' => $posts->id]) }}">編集</a>
+                                            <a href="{{ action('PostsController@detail', ['id' => $post->id]) }}">詳細</a>
                                         </div>
                                         <div>
-                                            <a href="{{ action('PostsController@delete', ['id' => $posts->id]) }}">削除</a>   
+                                            <a href="{{ action('PostsController@delete', ['id' => $post->id]) }}">削除</a>
                                         </div>
                                     </td>
                                 </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>    
             </div>
         </div>
     </div>
+@endsection

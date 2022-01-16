@@ -21,7 +21,7 @@ class CreatePostsTable extends Migration
             $table->date('publication_date')->nullable();
             $table->string('word')->nullable();
             $table->string('feelings')->nullable();
-            $table->string('image')->nullable();
+            $table->string('image_path')->nullable();
             $table->timestamps();
         });
     }
