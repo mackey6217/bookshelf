@@ -15,7 +15,10 @@ class Posts extends Model
        'publication_date' => 'nullable',
        'word' => 'nullable',
        'feelings' => 'nullable',
-       'image' => 'nullable',
+       'image_path' => 'nullable',
        );
     
+    public function user(){
+        return $this->belongsTo('\App\Models\Users');
+    }
 }

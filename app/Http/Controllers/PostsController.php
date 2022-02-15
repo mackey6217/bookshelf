@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Posts;
 use Carbon\Carbon;
 use Storage;
+use Auth;
 
 class PostsController extends Controller
 {
@@ -21,15 +22,14 @@ class PostsController extends Controller
         $this->validate($request, Posts::$rules);
         $post = new Posts;
         $form = $request->all();
+        $form["user_id"] = Auth::id();
         
-        //dd($form['image']);
         if(isset($form['image'])) {
-            $path = $request->file('image')->store('public/image');
-            $post->image_path = basename($path);
+            $path = Storage::disk('s3')->putFile('/',$form['image'],'public');
+            $post->image_path = Storage::disk('s3')->url($path);
         } else {
             $post->image_path = null;
         }
-        
         
         unset($form['_token']);
         unset($form['image']);
@@ -37,7 +37,7 @@ class PostsController extends Controller
         $post->fill($form);
         $post->save();
         
-        return redirect('post');
+        return redirect('/');
     }
     
     public function index(Request $request)
@@ -59,14 +59,17 @@ class PostsController extends Controller
         if (empty($post)) {
             about(404);
         }
-        //dd($form['image']);
-        if (isset($form['image'])) {
-            $path = $request->file('image')->store('public/image');
-            $post->image_path = basename($path);
-        } else {
-            $post->image_path = null;
-        }
         return view('post.detail', ['post_form' => $post]);
+    }
+    
+        public function edit(Request $request)
+    {
+        $post = Posts::find($request->id);
+        if (empty($post)) {
+            abort(404);
+        }
+        $this->postUserJudgment($post->user_id);
+        return view('post/edit', ['post_form' => $post]);
     }
     
     public function update(Request $request)
@@ -74,17 +77,42 @@ class PostsController extends Controller
         $this->validate($request, Posts::$rules);
         $post = Posts::find($request->id);
         $post_form = $request->all();
+        if ($request->remove == 'true') {
+          $post_form['image_path'] = null;
+      } elseif ($request->file('image')) {
+          $path = Storage::disk('s3')->putFile('/',$post_form['image'],'public');
+          $post->image_path = Storage::disk('s3')->url($path);
+      } else {
+          $post_form['image_path'] = $post->image_path;
+      }
         unset($post_form['_token']);
+        unset($post_form['image']);
         
         $post->fill($post_form)->save();
-        
-        return redirect('post');
+        return redirect('/');
     }
     
     public function delete(Request $request)
     {
         $post = Posts::find($request->id);
+        $this->postUserJudgment($post->user_id);
         $post->delete();
-        return redirect('post');
+        
+        return redirect('/');
     }
+    
+    private function postUserJudgment($postUserId)
+    {
+        if ($postUserId !== Auth::id()){
+            abort(403);
+        }
+    }
+    
+    
+    //public function __construct(){
+       // $this->middleware('auth')->only([ 'edit', 'update', 'delete']);
+       // $this->middleware('can:update,article')->only(['edit', 'update']);
+       // $this->middleware('verified')->only('create');
+   // }
 }
+

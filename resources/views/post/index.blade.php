@@ -48,15 +48,20 @@
                                     <td>{{ \Str::limit($post->author, 20) }}</td>
                                     <td>{{ \Str::limit($post->publisher, 20) }}</td>
                                     <td>{{ \Str::limit($post->publication_date, 20) }}</td>
-                                    <td>{{ \Str::limit($post->word, 100) }}</td>
-                                    <td>{{ \Str::limit($post->feelings, 100) }}</td>
+                                    <td>{{ \Str::limit($post->word, 50) }}</td>
+                                    <td>{{ \Str::limit($post->feelings, 50) }}</td>
                                     <td>
                                         <div>
                                             <a href="{{ action('PostsController@detail', ['id' => $post->id]) }}">詳細</a>
                                         </div>
-                                        <div>
-                                            <a href="{{ action('PostsController@delete', ['id' => $post->id]) }}">削除</a>
-                                        </div>
+                                        @if ($post->user_id === Auth::id())
+                                       <div>
+                                           <a href="{{ action('PostsController@delete', ['id' => $post->id]) }}">削除</a>
+                                       </div>
+                                       <div>
+                                           <a href="{{ action('PostsController@edit', ['id' => $post->id]) }}">編集</a>
+                                       </div>
+                                       @endif
                                     </td>
                                 </tr>
                             @endforeach

@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-md-8 mx-auto">
                 <h1>投稿の詳細</h1>
-                <form action="{{ action('PostsController@create') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ action('PostsController@detail') }}" method="post" enctype="multipart/form-data">
                     
                     <div class="form-group row">
                         <label class="col-md-3" for="title">タイトル</label>
@@ -48,7 +48,11 @@
                     <div class="form-group row">
                         <label class="col-md-3" for="image">画像</label>
                         <div class="col-md-5">
-                            <p>{{ $post_form->image }}</p>
+                            @if ($post_form->image_path)
+                            <img src="{{ $post_form->image_path }}" style="max-width:450px">
+                            @else 
+                            <p>NO IMAGE</p>
+                            @endif
                         </div>
                     </div>
             </div> 

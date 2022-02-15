@@ -11,13 +11,19 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', 'PostsController@index');
     
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
+    Route::get('post/create', 'PostsController@add');
+    Route::post('post/create', 'PostsController@create');
+    Route::get('post/delete', 'PostsController@delete');
+    Route::get('post/edit', 'PostsController@edit');
+    Route::post('post/edit', 'PostsController@update');
 });
 
-Route::get('post/create', 'PostsController@add');
-Route::post('post/create', 'PostsController@create');
-Route::get('post', 'PostsController@index');
 Route::get('post/detail', 'PostsController@detail');
-Route::get('post/delete', 'PostsController@delete');
+
+
+
+Auth::routes();
