@@ -11,6 +11,8 @@ return [
         'password' => [
             'required' => ':attributeを入力してください',
         ],
+        
+],
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
@@ -24,7 +26,7 @@ return [
 
     'attributes' => [
         'email' => 'メールアドレス',
-        'password' => 'パスワード',
+        'password' => 'パスワード'
     ],
-    
+
 ];
